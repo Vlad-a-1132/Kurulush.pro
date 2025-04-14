@@ -2,12 +2,11 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import Link from 'next/link';
 
 interface MastersModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectMaster?: (masterId: number) => void;
   selectedMasterId?: number;
 }
 
@@ -713,8 +712,7 @@ const masters: Master[] = [
 
 const MastersModal: React.FC<MastersModalProps> = ({ 
   isOpen, 
-  onClose, 
-  onSelectMaster, 
+  onClose,
   selectedMasterId 
 }) => {
   const router = useRouter();

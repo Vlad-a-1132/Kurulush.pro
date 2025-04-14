@@ -40,27 +40,23 @@ type Master = {
 
 // Интерфейс для пропсов компонента
 interface MastersListProps {
-  inTaskCreation?: boolean;
-  onSelectMaster?: (masterId: number) => void;
   selectedMasterId?: number;
 }
 
 const MastersList: React.FC<MastersListProps> = ({ 
-  inTaskCreation = false, 
-  onSelectMaster, 
   selectedMasterId 
 }) => {
   const router = useRouter();
+  const [failedImages, setFailedImages] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [expandedMaster, setExpandedMaster] = useState<number | null>(null);
-  const [failedImages, setFailedImages] = useState<{[key: number]: boolean}>({});
 
-  const handleImageError = (id: number) => {
-    setFailedImages(prev => ({
-      ...prev,
-      [id]: true
-    }));
+  const handleImageError = (masterId: number) => {
+    setFailedImages(prev => [...prev, masterId]);
+  };
+
+  const handleChatClick = (masterId: number) => {
+    router.push(`/conversations/${masterId}`);
   };
 
   // Моковые данные мастеров для примера
@@ -289,7 +285,7 @@ const MastersList: React.FC<MastersListProps> = ({
                 {/* Аватар */}
                 <div className="flex-shrink-0 mr-4 flex flex-col items-center">
                   <div className="w-14 h-14 relative mb-1">
-                    {master.avatar && !failedImages[master.id] ? (
+                    {master.avatar && !failedImages.includes(master.id) ? (
                       <Image 
                         src={master.avatar}
                         alt={master.name} 
@@ -409,17 +405,13 @@ const MastersList: React.FC<MastersListProps> = ({
                   <div className="flex justify-between items-center mt-4">
                     <Link 
                       href={`/masters/${master.id}`}
-                      className="text-blue-600 hover:underline"
+                      className="text-blue-600 hover:underline text-sm"
                     >
                       Смотреть профиль
                     </Link>
                     <button
-                      onClick={() => router.push(`/conversations/${master.id}`)}
-                      className={`px-4 py-2 rounded transition ${
-                        selectedMasterId === master.id
-                          ? 'bg-blue-700 text-white'
-                          : 'bg-blue-600 text-white hover:bg-blue-700'
-                      }`}
+                      onClick={() => handleChatClick(master.id)}
+                      className="px-4 py-2 rounded-lg text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                     >
                       Написать
                     </button>
