@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
@@ -16,24 +18,28 @@
   --font-mono: var(--font-geist-mono);
 }
 
-body {
-  background: #ffffff;
-  color: #171717;
-  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+@layer base {
+  body {
+    background: #ffffff;
+    color: #171717;
+    font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  }
 }
 
-.text-gray-900 {
-  color: #171717 !important;
-}
+@layer utilities {
+  .text-gray-900 {
+    color: #171717 !important;
+  }
 
-.text-gray-800 {
-  color: #262626 !important;
-}
+  .text-gray-800 {
+    color: #262626 !important;
+  }
 
-.text-gray-700 {
-  color: #404040 !important;
-}
+  .text-gray-700 {
+    color: #404040 !important;
+  }
 
-.text-gray-600 {
-  color: #525252 !important;
+  .text-gray-600 {
+    color: #525252 !important;
+  }
 }
