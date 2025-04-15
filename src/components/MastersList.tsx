@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -48,6 +48,7 @@ const MastersList: React.FC<MastersListProps> = ({
 }) => {
   const router = useRouter();
   const [failedImages, setFailedImages] = useState<number[]>([]);
+  const [expandedMaster, setExpandedMaster] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
