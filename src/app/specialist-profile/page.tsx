@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { EnvelopeIcon, PhoneIcon, MapPinIcon, BriefcaseIcon, ClockIcon, StarIcon } from '@heroicons/react/24/outline';
@@ -124,7 +124,7 @@ interface User {
   profileCompleted?: boolean;
 }
 
-export default function SpecialistProfile() {
+function SpecialistProfileContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
@@ -479,5 +479,17 @@ export default function SpecialistProfile() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function SpecialistProfile() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-8 flex justify-center items-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <SpecialistProfileContent />
+    </Suspense>
   );
 } 

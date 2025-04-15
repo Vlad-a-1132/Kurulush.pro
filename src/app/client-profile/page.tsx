@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
@@ -86,7 +86,7 @@ const mockOrders = [
   },
 ];
 
-export default function ClientProfile() {
+function ClientProfileContent() {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
   const [activeTab, setActiveTab] = useState('profile');
@@ -430,5 +430,17 @@ export default function ClientProfile() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function ClientProfile() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-8 flex justify-center items-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <ClientProfileContent />
+    </Suspense>
   );
 }

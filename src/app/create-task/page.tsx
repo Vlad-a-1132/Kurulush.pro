@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -26,7 +26,7 @@ type Master = {
   areas?: string[];
 };
 
-export default function CreateTask() {
+function CreateTaskContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [taskName, setTaskName] = useState('');
@@ -722,5 +722,17 @@ export default function CreateTask() {
         selectedMasterId={selectedMaster?.id}
       />
     </div>
+  );
+}
+
+export default function CreateTask() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-8 flex justify-center items-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <CreateTaskContent />
+    </Suspense>
   );
 } 

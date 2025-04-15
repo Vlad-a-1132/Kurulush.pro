@@ -1,11 +1,11 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function SearchResults() {
+function SearchResultsContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const specialty = searchParams.get('specialty') || '';
@@ -202,5 +202,17 @@ export default function SearchResults() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function SearchResults() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-8 flex justify-center items-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <SearchResultsContent />
+    </Suspense>
   );
 } 
