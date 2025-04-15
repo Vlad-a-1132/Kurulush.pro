@@ -8,6 +8,7 @@ interface MastersModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedMasterId?: number;
+  onSelectMaster?: (masterId: number) => void;
 }
 
 // Категории специалистов
@@ -713,7 +714,8 @@ const masters: Master[] = [
 const MastersModal: React.FC<MastersModalProps> = ({ 
   isOpen, 
   onClose,
-  selectedMasterId 
+  selectedMasterId,
+  onSelectMaster
 }) => {
   const router = useRouter();
   const modalRef = useRef<HTMLDivElement>(null);
@@ -770,7 +772,11 @@ const MastersModal: React.FC<MastersModalProps> = ({
   });
 
   const handleChatClick = (masterId: number) => {
-    router.push(`/conversations/${masterId}`);
+    if (onSelectMaster) {
+      onSelectMaster(masterId);
+    } else {
+      router.push(`/conversations/${masterId}`);
+    }
     onClose();
   };
 
