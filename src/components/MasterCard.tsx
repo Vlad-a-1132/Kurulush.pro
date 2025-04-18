@@ -100,18 +100,24 @@ const MasterCard = ({ master }: MasterCardProps) => {
           </div>
         )}
         
-        <div className="mt-4 flex space-x-3">
+        <div className="mt-4 grid grid-cols-2 gap-2">
           <Link 
             href={`/masters/${master.id}`}
-            className="flex-1 px-4 py-2 text-center bg-yandex-yellow text-black rounded-md hover:bg-yandex-yellow-hover transition font-medium text-sm btn-yellow"
+            className="px-4 py-2 text-center bg-yandex-yellow text-black rounded-md hover:bg-yandex-yellow-hover transition font-medium text-sm btn-yellow"
           >
             Профиль
           </Link>
           <Link 
             href={`/chat?master=${master.id}`}
-            className="flex-1 px-4 py-2 text-center border border-black text-black rounded-md hover:bg-gray-100 transition text-sm btn-outline"
+            className="px-4 py-2 text-center border border-black text-black rounded-md hover:bg-gray-100 transition text-sm btn-outline"
           >
             Написать
+          </Link>
+          <Link 
+            href={`/propose-task/${master.id}`}
+            className="col-span-2 px-4 py-2 text-center border border-yandex-yellow text-black rounded-md hover:bg-yandex-yellow hover:bg-opacity-10 transition text-sm"
+          >
+            Предложить задание
           </Link>
         </div>
       </div>

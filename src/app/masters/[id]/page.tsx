@@ -349,11 +349,12 @@ export default function MasterProfile() {
               >
                 Предложить задание
               </Link>
-              <button 
+              <Link 
+                href={`/chat?master=${master.id}`} 
                 className="px-4 py-2 border border-black text-black rounded-md hover:bg-gray-50 transition"
               >
                 Написать сообщение
-              </button>
+              </Link>
             </div>
           </div>
         </div>
