@@ -218,10 +218,48 @@ const MastersList: React.FC<MastersListProps> = ({
   const categories = [
     { id: 'all', name: 'Все категории' },
     { id: 'repair', name: 'Ремонт и строительство' },
-    { id: 'beauty', name: 'Красота и здоровье' },
-    { id: 'education', name: 'Образование' },
-    { id: 'it', name: 'IT и компьютерная помощь' },
-    { id: 'cleaning', name: 'Уборка и помощь по хозяйству' }
+    { id: 'repair_general', name: '🔨 Ремонт' },
+    { id: 'repair_capital', name: 'Капитальный ремонт' },
+    { id: 'repair_cosmetic', name: 'Косметический ремонт' },
+    { id: 'repair_turnkey', name: 'Ремонт квартир под ключ' },
+    { id: 'repair_house', name: 'Ремонт домов/коттеджей' },
+    { id: 'repair_office', name: 'Ремонт офисов' },
+    { id: 'repair_demolition', name: 'Демонтажные работы' },
+    { id: 'repair_plaster', name: 'Штукатурные и малярные работы' },
+    
+    { id: 'finishing', name: '🎨 Отделка' },
+    { id: 'finishing_rough', name: 'Черновая отделка' },
+    { id: 'finishing_final', name: 'Чистовая отделка' },
+    { id: 'finishing_walls', name: 'Отделка стен' },
+    { id: 'finishing_ceiling', name: 'Отделка потолков' },
+    { id: 'finishing_floor', name: 'Отделка полов' },
+    { id: 'finishing_tile', name: 'Облицовка плиткой' },
+    { id: 'finishing_decor', name: 'Декоративные элементы' },
+    
+    { id: 'electrical', name: '💡 Электрика' },
+    { id: 'electrical_wiring', name: 'Монтаж электропроводки' },
+    { id: 'electrical_sockets', name: 'Установка розеток и выключателей' },
+    { id: 'electrical_panels', name: 'Монтаж электрощитов' },
+    { id: 'electrical_lighting', name: 'Установка освещения' },
+    { id: 'electrical_smart', name: 'Умный дом' },
+    
+    { id: 'plumbing', name: '🚰 Водопровод' },
+    { id: 'plumbing_pipes', name: 'Монтаж труб' },
+    { id: 'plumbing_fixtures', name: 'Установка сантехники' },
+    { id: 'plumbing_filters', name: 'Установка фильтров и счетчиков' },
+    { id: 'plumbing_sewage', name: 'Канализация' },
+    { id: 'plumbing_heating', name: 'Отопление' },
+    
+    { id: 'design', name: '🖼️ Дизайн' },
+    { id: 'design_interior', name: 'Дизайн интерьера' },
+    { id: 'design_home', name: 'Дизайн квартиры/дома' },
+    { id: 'design_3d', name: '3D-визуализация' },
+    
+    { id: 'roof', name: '🏠 Крыша' },
+    { id: 'roof_installation', name: 'Монтаж кровли' },
+    { id: 'roof_repair', name: 'Ремонт кровли' },
+    { id: 'roof_insulation', name: 'Утепление крыши' },
+    { id: 'roof_waterproofing', name: 'Гидроизоляция' }
   ];
 
   // Фильтрация мастеров по запросу и категории
@@ -232,10 +270,9 @@ const MastersList: React.FC<MastersListProps> = ({
     
     const matchesCategory = selectedCategory === 'all' || (
       (selectedCategory === 'repair' && ['Сантехник', 'Электрик', 'Мастер отделочных работ'].includes(master.title)) ||
-      (selectedCategory === 'education' && master.title.includes('Репетитор')) ||
-      (selectedCategory === 'it' && master.title.includes('IT')) ||
-      (selectedCategory === 'beauty' && master.title.includes('Красота')) ||
-      (selectedCategory === 'cleaning' && master.title.includes('Уборка'))
+      (selectedCategory === 'electrical' && master.title.includes('Электрик')) ||
+      (selectedCategory === 'plumbing' && master.title.includes('Сантехник')) ||
+      (selectedCategory === 'design' && master.title.includes('Дизайнер'))
     );
     
     return matchesSearch && matchesCategory;

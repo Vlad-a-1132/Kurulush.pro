@@ -85,24 +85,24 @@ const Reviews = () => {
   return (
     <section className="py-16 px-4 bg-white">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Отзывы о нашем сервисе</h2>
-        <p className="text-gray-800 text-center mb-10 max-w-2xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-4 text-black">Отзывы о нашем сервисе</h2>
+        <p className="text-gray-700 text-center mb-10 max-w-2xl mx-auto">
           Более 10,000 клиентов нашли подходящих специалистов на нашей платформе. Вот что они говорят о нас.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {activeReviews.map((review) => (
-            <div key={review.id} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+            <div key={review.id} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 rounded-full bg-gray-200 mr-4 overflow-hidden">
                   {/* Placeholder for avatar */}
-                  <div className="w-full h-full flex items-center justify-center font-bold text-blue-600 bg-blue-100">
+                  <div className="w-full h-full flex items-center justify-center font-bold text-black bg-gray-100">
                     {review.name.charAt(0)}
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900">{review.name}</h4>
-                  <p className="text-sm text-gray-800">{review.role}</p>
+                  <h4 className="font-bold text-black">{review.name}</h4>
+                  <p className="text-sm text-gray-700">{review.role}</p>
                 </div>
               </div>
               
@@ -110,7 +110,7 @@ const Reviews = () => {
                 {Array.from({ length: 5 }).map((_, index) => (
                   <svg 
                     key={index}
-                    className={`w-5 h-5 ${index < review.rating ? 'text-yellow-400' : 'text-gray-300'}`} 
+                    className={`w-5 h-5 ${index < review.rating ? 'text-yandex-yellow' : 'text-gray-300'}`} 
                     fill="currentColor" 
                     viewBox="0 0 20 20"
                   >
@@ -119,15 +119,15 @@ const Reviews = () => {
                 ))}
               </div>
               
-              <p className="text-gray-800 mb-4">{review.text}</p>
+              <p className="text-gray-700 mb-4">{review.text}</p>
               
               {review.specialist && (
-                <div className="text-sm text-gray-800 italic">
+                <div className="text-sm text-gray-700 italic">
                   Специалист: {review.specialist}
                 </div>
               )}
               
-              <div className="text-sm text-gray-700 mt-2">
+              <div className="text-sm text-gray-600 mt-2">
                 {review.date}
               </div>
             </div>
@@ -138,13 +138,13 @@ const Reviews = () => {
           <div className="flex justify-center space-x-4">
             <button 
               onClick={handlePrevPage}
-              className="px-4 py-2 border border-blue-600 rounded-md text-blue-600 hover:bg-blue-50 transition"
+              className="px-4 py-2 border border-black rounded-md text-black hover:bg-gray-100 transition btn-outline"
             >
               ← Предыдущие
             </button>
             <button 
               onClick={handleNextPage}
-              className="px-4 py-2 bg-blue-600 rounded-md text-white hover:bg-blue-700 transition"
+              className="px-4 py-2 bg-yandex-yellow rounded-md text-black hover:bg-yandex-yellow-hover transition font-medium btn-yellow"
             >
               Следующие →
             </button>

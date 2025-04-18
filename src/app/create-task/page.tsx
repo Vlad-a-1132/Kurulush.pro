@@ -38,9 +38,10 @@ function CreateTaskContent() {
 
   // Предустановленные категории задач
   const taskCategories = [
-    '1с программист', '1с программирование', '1с ут', '1с специалист',
-    '1с настройка', '1с управление', '1с предприятие', '1с аналитика',
-    '1с бухгалтерия', '1с аналитик'
+    'Ремонт и строительство', 'Отделка помещений', 'Электрика', 
+    'Сантехника', 'Дизайн интерьера', 'Кровельные работы',
+    'Установка смесителя', 'Монтаж проводки', 'Поклейка обоев',
+    'Разработка дизайн-проекта', 'Ремонт кровли', 'Стяжка пола'
   ];
 
   // Моковые данные мастеров для примера
@@ -211,13 +212,13 @@ function CreateTaskContent() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="/client-profile?tab=orders" 
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="px-6 py-3 bg-yandex-yellow text-black rounded-md hover:bg-yandex-yellow-hover transition font-medium btn-yellow"
             >
               Перейти к моим задачам
             </Link>
             <Link 
               href="/masters" 
-              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+              className="px-6 py-3 border border-black text-black rounded-md hover:bg-gray-100 transition btn-outline"
             >
               Посмотреть мастеров
             </Link>
@@ -253,7 +254,7 @@ function CreateTaskContent() {
                   }
                 }}
                 placeholder="Например: Починить протекающий кран"
-                className={`w-full p-4 border ${showError ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                className={`w-full p-4 border ${showError ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:border-black focus:ring-1 focus:ring-black`}
               />
               {showError && (
                 <p className="text-red-500 text-sm mt-1">Пожалуйста, введите название задачи (минимум 5 символов)</p>
@@ -287,18 +288,20 @@ function CreateTaskContent() {
               <textarea
                 rows={6}
                 placeholder="Опишите, что необходимо сделать, укажите детали и особенности..."
-                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
               ></textarea>
             </div>
             
             <div className="mb-6">
               <label className="block text-gray-700 mb-2">Категория</label>
-              <select className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-black focus:ring-1 focus:ring-black">
                 <option value="">Выберите категорию</option>
                 <option value="repair">Ремонт и строительство</option>
-                <option value="beauty">Красота и здоровье</option>
-                <option value="it">IT и компьютерная помощь</option>
-                <option value="cleaning">Уборка и помощь по хозяйству</option>
+                <option value="finishing">Отделка помещений</option>
+                <option value="electrical">Электрика</option>
+                <option value="plumbing">Сантехника</option>
+                <option value="design">Дизайн интерьера</option>
+                <option value="roof">Кровельные работы</option>
               </select>
             </div>
             
@@ -307,11 +310,11 @@ function CreateTaskContent() {
               <input
                 type="text"
                 placeholder="Введите адрес или выберите 'Удаленно'"
-                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
               />
               <div className="mt-2">
                 <label className="inline-flex items-center">
-                  <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600" />
+                  <input type="checkbox" className="form-checkbox h-5 w-5 text-black" />
                   <span className="ml-2 text-gray-700">Удаленная работа</span>
                 </label>
               </div>
@@ -332,11 +335,11 @@ function CreateTaskContent() {
               <input
                 type="number"
                 placeholder="Укажите сумму"
-                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
               />
               <div className="mt-2">
                 <label className="inline-flex items-center">
-                  <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600" />
+                  <input type="checkbox" className="form-checkbox h-5 w-5 text-black" />
                   <span className="ml-2 text-gray-700">По договоренности</span>
                 </label>
               </div>
@@ -349,20 +352,20 @@ function CreateTaskContent() {
                   <label className="block text-gray-700 text-sm mb-1">Дата начала</label>
                   <input
                     type="date"
-                    className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
                   />
                 </div>
                 <div>
                   <label className="block text-gray-700 text-sm mb-1">Дата окончания</label>
                   <input
                     type="date"
-                    className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
                   />
                 </div>
               </div>
               <div className="mt-2">
                 <label className="inline-flex items-center">
-                  <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600" />
+                  <input type="checkbox" className="form-checkbox h-5 w-5 text-black" />
                   <span className="ml-2 text-gray-700">Срочно (в течение 24 часов)</span>
                 </label>
               </div>
@@ -481,7 +484,7 @@ function CreateTaskContent() {
                       <div className="mt-3 flex justify-end">
                         <button 
                           onClick={() => setShowMastersModal(true)}
-                          className="text-blue-600 text-sm hover:underline"
+                          className="text-gray-700 hover:text-black text-sm"
                         >
                           Изменить специалиста
                         </button>
@@ -494,8 +497,8 @@ function CreateTaskContent() {
             
             <div className="mb-6">
               <label className="inline-flex items-center">
-                <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600" defaultChecked={true} />
-                <span className="ml-2 text-gray-700">Я принимаю <Link href="/terms" className="text-blue-600 hover:underline">условия использования</Link> и <Link href="/privacy" className="text-blue-600 hover:underline">политику конфиденциальности</Link>.</span>
+                <input type="checkbox" className="form-checkbox h-5 w-5 text-black" defaultChecked={true} />
+                <span className="ml-2 text-gray-700">Я принимаю <Link href="/terms" className="text-gray-700 hover:text-black underline">условия использования</Link> и <Link href="/privacy" className="text-gray-700 hover:text-black underline">политику конфиденциальности</Link>.</span>
               </label>
             </div>
           </>
@@ -521,7 +524,7 @@ function CreateTaskContent() {
                 <div className="mt-3">
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
-                      className="bg-blue-600 h-2 rounded-full" 
+                      className="bg-yandex-yellow h-2 rounded-full" 
                       style={{ width: getStepProgress() }}
                     ></div>
                   </div>
@@ -533,25 +536,25 @@ function CreateTaskContent() {
               <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4">
                 <ul className="space-y-3">
                   <li className="flex items-center">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${currentStep >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${currentStep >= 1 ? 'bg-yandex-yellow text-black' : 'bg-gray-200 text-gray-500'}`}>
                       {currentStep > 1 ? '✓' : '1'}
                     </div>
                     <span className={currentStep === 1 ? 'font-medium' : ''}>Название задачи</span>
                   </li>
                   <li className="flex items-center">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${currentStep >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${currentStep >= 2 ? 'bg-yandex-yellow text-black' : 'bg-gray-200 text-gray-500'}`}>
                       {currentStep > 2 ? '✓' : '2'}
                     </div>
                     <span className={currentStep === 2 ? 'font-medium' : ''}>Детали задачи</span>
                   </li>
                   <li className="flex items-center">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${currentStep >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${currentStep >= 3 ? 'bg-yandex-yellow text-black' : 'bg-gray-200 text-gray-500'}`}>
                       {currentStep > 3 ? '✓' : '3'}
                     </div>
                     <span className={currentStep === 3 ? 'font-medium' : ''}>Бюджет и сроки</span>
                   </li>
                   <li className="flex items-center">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${currentStep >= 4 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${currentStep >= 4 ? 'bg-yandex-yellow text-black' : 'bg-gray-200 text-gray-500'}`}>
                       {currentStep > 4 ? '✓' : '4'}
                     </div>
                     <span className={currentStep === 4 ? 'font-medium' : ''}>Публикация</span>
@@ -562,8 +565,8 @@ function CreateTaskContent() {
             
             <div className="mb-4">
               <div className="font-medium mb-2">Поддержка</div>
-              <Link href="/faq" className="text-blue-600 hover:underline block mb-2">Часто задаваемые вопросы</Link>
-              <Link href="/support" className="text-blue-600 hover:underline block">Написать в поддержку</Link>
+              <Link href="/faq" className="text-gray-700 hover:text-black block mb-2">Часто задаваемые вопросы</Link>
+              <Link href="/support" className="text-gray-700 hover:text-black block">Написать в поддержку</Link>
             </div>
             
             <div className="mb-4">
@@ -674,40 +677,20 @@ function CreateTaskContent() {
             {renderStepContent()}
             
             {!isPublished && (
-              <div className="flex justify-between mt-8">
-                {currentStep > 1 ? (
-                  <button 
-                    onClick={() => setCurrentStep(currentStep - 1)}
-                    className="flex items-center px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Назад
-                  </button>
-                ) : (
-                  <Link 
-                    href="/"
-                    className="flex items-center px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Начать заново
-                  </Link>
-                )}
-                
+              <div className="mt-6 flex flex-col sm:flex-row gap-4">
                 <button
+                  type="button"
                   onClick={handleContinue}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                  className="px-6 py-3 bg-yandex-yellow text-black rounded-md hover:bg-yandex-yellow-hover transition font-medium btn-yellow"
                 >
-                  {currentStep < 4 ? 'Продолжить' : 'Опубликовать задачу'}
-                  {currentStep < 4 && (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  )}
+                  Продолжить
                 </button>
+                <Link
+                  href="/job-board"
+                  className="px-6 py-3 border border-black text-black rounded-md hover:bg-gray-100 transition text-center btn-outline"
+                >
+                  Отмена
+                </Link>
               </div>
             )}
           </div>

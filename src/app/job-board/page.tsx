@@ -27,12 +27,11 @@ export default function JobBoard() {
   const categories = [
     'Все категории',
     'Ремонт и строительство',
-    'Бытовые услуги',
-    'Красота и здоровье',
-    'IT и программирование',
-    'Дизайн и оформление',
-    'Обучение и репетиторство',
-    'Транспорт и перевозки'
+    'Отделка помещений',
+    'Электрика',
+    'Сантехника',
+    'Дизайн интерьера',
+    'Кровельные работы'
   ];
 
   // Статусы задач
@@ -48,7 +47,7 @@ export default function JobBoard() {
     {
       id: 1,
       title: 'Установка смесителя в ванной',
-      category: 'Ремонт и строительство',
+      category: 'Сантехника',
       description: 'Нужно установить новый смеситель в ванной комнате. Смеситель уже куплен.',
       budget: '1500 сом',
       location: 'Бишкек, центр',
@@ -59,10 +58,10 @@ export default function JobBoard() {
     },
     {
       id: 2,
-      title: 'Создание лого для магазина одежды',
-      category: 'Дизайн и оформление',
-      description: 'Требуется разработать современный логотип для нового магазина женской одежды.',
-      budget: '3000-5000 сом',
+      title: 'Разработка дизайн-проекта квартиры',
+      category: 'Дизайн интерьера',
+      description: 'Требуется разработать дизайн-проект для двухкомнатной квартиры площадью 65 кв.м.',
+      budget: '15000-25000 сом',
       location: 'Удаленно',
       date: '12.05.2025',
       status: 'active',
@@ -71,10 +70,10 @@ export default function JobBoard() {
     },
     {
       id: 3,
-      title: 'Репетитор по математике для подготовки к ОРТ',
-      category: 'Обучение и репетиторство',
-      description: 'Ищу опытного репетитора для подготовки к ОРТ по математике. Занятия 2 раза в неделю.',
-      budget: '500 сом/час',
+      title: 'Капитальный ремонт квартиры',
+      category: 'Ремонт и строительство',
+      description: 'Требуется выполнить капитальный ремонт трехкомнатной квартиры под ключ.',
+      budget: '250000 сом',
       location: 'Бишкек, мкр. Асанбай',
       date: '10.05.2025',
       status: 'active',
@@ -83,22 +82,10 @@ export default function JobBoard() {
     },
     {
       id: 4,
-      title: 'Перевозка мебели из старой квартиры в новую',
-      category: 'Транспорт и перевозки',
-      description: 'Необходимо перевезти мебель из двухкомнатной квартиры. Расстояние около 5 км.',
-      budget: '2000 сом',
-      location: 'Бишкек, мкр. Джал',
-      date: '18.05.2025',
-      status: 'new',
-      responseCount: 2,
-      viewCount: 9
-    },
-    {
-      id: 5,
-      title: 'Настройка 1С Бухгалтерия',
-      category: 'IT и программирование',
-      description: 'Требуется настройка 1С Бухгалтерия для небольшого торгового предприятия.',
-      budget: '10000 сом',
+      title: 'Монтаж электропроводки в новой квартире',
+      category: 'Электрика',
+      description: 'Требуется провести электропроводку в новой квартире площадью 75 кв.м.',
+      budget: '20000 сом',
       location: 'Бишкек',
       date: '08.05.2025',
       status: 'completed',
@@ -106,16 +93,28 @@ export default function JobBoard() {
       viewCount: 15
     },
     {
-      id: 6,
-      title: 'Маникюр и педикюр на дому',
-      category: 'Красота и здоровье',
-      description: 'Ищу мастера для маникюра и педикюра с выездом на дом.',
-      budget: '1200 сом',
+      id: 5,
+      title: 'Поклейка обоев в спальне',
+      category: 'Отделка помещений',
+      description: 'Нужно поклеить обои в спальне площадью 18 кв.м. Обои уже куплены.',
+      budget: '8000 сом',
       location: 'Бишкек, мкр. Восток-5',
       date: '20.05.2025',
       status: 'new',
       responseCount: 7,
       viewCount: 21
+    },
+    {
+      id: 6,
+      title: 'Ремонт кровли частного дома',
+      category: 'Кровельные работы',
+      description: 'Требуется ремонт кровли частного дома площадью 120 кв.м.',
+      budget: '45000 сом',
+      location: 'Бишкек, жилмассив Арча-Бешик',
+      date: '22.05.2025',
+      status: 'new',
+      responseCount: 3,
+      viewCount: 14
     }
   ];
 
@@ -141,7 +140,7 @@ export default function JobBoard() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-6xl mx-auto">
         <div className="mb-6">
-          <Link href="/" className="text-blue-600 hover:underline flex items-center">
+          <Link href="/" className="text-gray-700 hover:text-black flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -153,7 +152,7 @@ export default function JobBoard() {
           <h1 className="text-3xl font-bold">Доска объявлений</h1>
           <Link
             href="/create-task"
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="px-6 py-3 bg-yandex-yellow text-black rounded-md hover:bg-yandex-yellow-hover transition font-medium btn-yellow"
           >
             + Разместить задачу
           </Link>
@@ -168,7 +167,7 @@ export default function JobBoard() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Введите ключевое слово"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
             />
           </div>
           
@@ -178,7 +177,7 @@ export default function JobBoard() {
               <select
                 value={selectedCategory || 'Все категории'}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black focus:ring-1 focus:ring-black bg-white"
               >
                 {categories.map((category) => (
                   <option key={category} value={category}>{category}</option>
@@ -191,7 +190,7 @@ export default function JobBoard() {
               <select
                 value={selectedStatus || 'Все статусы'}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black focus:ring-1 focus:ring-black bg-white"
               >
                 {statuses.map((status) => (
                   <option key={status} value={status}>{status}</option>
@@ -207,12 +206,12 @@ export default function JobBoard() {
             {filteredTasks.map((task) => (
               <div key={task.id} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition">
                 <div className="flex justify-between items-start mb-2">
-                  <Link href={`/tasks/${task.id}`} className="text-xl font-bold text-blue-600 hover:underline">
+                  <Link href={`/tasks/${task.id}`} className="text-xl font-bold text-black hover:underline">
                     {task.title}
                   </Link>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                     task.status === 'new' ? 'bg-green-100 text-green-800' : 
-                    task.status === 'active' ? 'bg-blue-100 text-blue-800' : 
+                    task.status === 'active' ? 'bg-yandex-yellow bg-opacity-30 text-black' : 
                     'bg-gray-100 text-gray-800'
                   }`}>
                     {task.status === 'new' ? 'Новая' : 
@@ -275,7 +274,7 @@ export default function JobBoard() {
             </p>
             <Link
               href="/create-task"
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition inline-block"
+              className="px-6 py-3 bg-yandex-yellow text-black rounded-md hover:bg-yandex-yellow-hover transition font-medium btn-yellow"
             >
               + Разместить задачу
             </Link>

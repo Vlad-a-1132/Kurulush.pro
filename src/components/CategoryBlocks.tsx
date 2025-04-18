@@ -1,81 +1,43 @@
 import Link from 'next/link';
-import Image from 'next/image';
-
-const categories = [
-  {
-    id: 'repair',
-    title: 'Мастера по ремонту',
-    description: 'Сантехники, электрики, мастера по ремонту бытовой техники, сборщики мебели и другие специалисты.',
-    image: '/image/santihnik copy.jpeg',
-    specialties: ['Сантехник', 'Электрик', 'Ремонт бытовой техники', 'Сборка мебели', 'Отделочные работы']
-  },
-  {
-    id: 'beauty',
-    title: 'Мастера красоты',
-    description: 'Парикмахеры, мастера маникюра и педикюра, косметологи, визажисты и другие специалисты.',
-    image: '/image/Bjuti-master.jpg',
-    specialties: ['Парикмахер', 'Маникюр и педикюр', 'Косметолог', 'Визажист', 'Массажист']
-  },
-  {
-    id: 'freelance',
-    title: 'Фрилансеры',
-    description: 'Дизайнеры, программисты, копирайтеры, фотографы, видеографы и другие специалисты.',
-    image: '/image/freelancer_1.jpg',
-    specialties: ['Дизайнер', 'Программист', 'Копирайтер', 'Фотограф', 'Видеограф']
-  },
-  {
-    id: 'tutors',
-    title: 'Репетиторы',
-    description: 'Репетиторы по школьным предметам, иностранным языкам, музыке, искусству и другим направлениям.',
-    image: '/image/repetiror.jpeg',
-    specialties: ['Математика', 'Иностранные языки', 'Физика', 'Музыка', 'Химия']
-  }
-];
+import { categories } from '@/data/categories';
 
 const CategoryBlocks = () => {
   return (
     <section className="py-16 px-4 bg-white">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Наши категории специалистов</h2>
+        <h2 className="text-3xl font-bold text-center mb-12 text-black">Наши категории услуг</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((category) => (
-            <div key={category.id} className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition duration-300">
-              <div className="h-48 relative bg-gray-200">
-                {/* Отображаем реальное изображение категории */}
-                <Image 
-                  src={category.image} 
-                  alt={category.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                />
+            <div key={category.id} className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition duration-300">
+              <div className="h-32 relative bg-gray-100 flex items-center justify-center">
+                <span className="text-6xl">{category.icon}</span>
               </div>
               
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-3 text-gray-900">{category.title}</h3>
-                <p className="text-gray-800 mb-4">{category.description}</p>
+                <h3 className="text-xl font-bold mb-3 text-black">{category.name}</h3>
+                <p className="text-gray-700 mb-4">{category.description}</p>
                 
                 <div className="mb-4">
-                  <h4 className="font-semibold text-sm text-gray-800 mb-2">Популярные специальности:</h4>
+                  <h4 className="font-semibold text-sm text-black mb-2">Популярные услуги:</h4>
                   <div className="flex flex-wrap gap-2">
-                    {category.specialties.map((specialty) => (
+                    {category.subcategories.slice(0, 5).map((subcategory) => (
                       <Link 
-                        href={`/search?specialty=${encodeURIComponent(specialty)}`} 
-                        key={specialty}
-                        className="text-xs px-2 py-1 bg-blue-50 text-blue-800 rounded-full hover:bg-blue-100"
+                        href={`/masters?specialty=${encodeURIComponent(subcategory)}`} 
+                        key={subcategory}
+                        className="text-xs px-2 py-1 bg-gray-100 text-black rounded-full hover:bg-gray-200"
                       >
-                        {specialty}
+                        {subcategory}
                       </Link>
                     ))}
                   </div>
                 </div>
                 
                 <Link 
-                  href={`/masters?category=${category.id}`}
-                  className="inline-block w-full text-center py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                  href={`/categories/${category.id}`}
+                  className="inline-block w-full text-center py-2 bg-yandex-yellow text-black rounded-md hover:bg-yandex-yellow-hover transition font-medium btn-yellow"
                 >
-                  Все специалисты
+                  Все мастера
                 </Link>
               </div>
             </div>

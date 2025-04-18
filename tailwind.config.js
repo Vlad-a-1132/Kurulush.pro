@@ -10,16 +10,23 @@ module.exports = {
     extend: {
       colors: {
         gray: {
-          900: '#171717', // Darkened for better contrast
-          800: '#262626',
-          700: '#404040',
-          600: '#525252',
-          500: '#737373',
-          400: '#a3a3a3',
-          300: '#d4d4d4',
+          900: '#000000', // Черный текст
+          800: '#222222',
+          700: '#444444',
+          600: '#666666',
+          500: '#888888',
+          400: '#aaaaaa',
+          300: '#cccccc',
           200: '#e5e5e5',
           100: '#f5f5f5',
           50: '#fafafa',
+        },
+        yandex: {
+          yellow: '#ffcc00', // Основной желтый
+          'yellow-hover': '#f2c200', // Чуть темнее при наведении
+          red: '#ff3333', // Красный для акцентов
+          black: '#000000', // Черный
+          gray: '#f5f5f5', // Светло-серый фон
         },
         blue: {
           50: '#e6f1ff',
@@ -33,6 +40,9 @@ module.exports = {
           800: '#002966',
           900: '#001433',
         }
+      },
+      fontFamily: {
+        sans: ['YS Text', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', 'sans-serif'],
       },
     },
   },
