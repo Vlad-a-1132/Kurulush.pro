@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { categories } from '@/data/categories';
@@ -15,11 +15,13 @@ export const dynamic = 'force-dynamic';
 function TaskFormLoading() {
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-3xl mx-auto flex justify-center items-center h-64">
-        <svg className="animate-spin h-8 w-8 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
+      <div className="max-w-2xl mx-auto">
+        <div className="h-96 flex justify-center items-center">
+          <svg className="animate-spin h-8 w-8 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
       </div>
     </div>
   );
@@ -28,38 +30,27 @@ function TaskFormLoading() {
 // Компонент для получения параметров URL
 function TaskParamsWrapper({ children }: { children: (masterId: string) => React.ReactNode }) {
   const params = useParams();
-  const masterId = params.id as string;
+  const masterId = params?.id as string || '1';
   
   return <>{children(masterId)}</>;
 }
 
-// Компонент, содержащий логику формы
+// Основной компонент формы задания
 function TaskFormContent({ masterId }: { masterId: string }) {
-  const router = useRouter();
-  
   const [master, setMaster] = useState<Master | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [formData, setFormData] = useState({
-    title: '',
-    category: '',
-    description: '',
-    budget: '',
-    address: '',
-    date: '',
-    time: '',
-    attachments: [] as File[]
-  });
-
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [address, setAddress] = useState('');
+  const [budget, setBudget] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Загрузка данных о мастере
   useEffect(() => {
     const loadMasterData = () => {
-      setIsLoading(true);
-      
-      // Mock master data - in a real application, this would come from an API
+      // Мок данные о мастерах
       const mastersData: Record<string, Master> = {
         '1': {
           id: 1,
@@ -105,79 +96,76 @@ function TaskFormContent({ masterId }: { masterId: string }) {
         }
       };
 
-      // Имитация задержки загрузки данных
-      setTimeout(() => {
-        setMaster(mastersData[masterId] || null);
-        setIsLoading(false);
-      }, 300);
+      setMaster(mastersData[masterId] || null);
     };
 
     loadMasterData();
   }, [masterId]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const fileList = Array.from(e.target.files);
-      setFormData(prev => ({ ...prev, attachments: [...prev.attachments, ...fileList] }));
-    }
-  };
-
-  const removeAttachment = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      attachments: prev.attachments.filter((_, i) => i !== index)
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setErrorMessage('');
-    setSuccessMessage('');
-
-    try {
-      // Simulate API call with a timeout
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // In a real app, you would send the form data to your API
-      console.log('Task proposal submitted:', { masterId, ...formData });
-      
-      setSuccessMessage('Ваше задание успешно отправлено мастеру!');
-      setTimeout(() => {
-        router.push(`/masters/${masterId}`);
-      }, 2000);
-    } catch (error) {
-      setErrorMessage('Произошла ошибка при отправке задания. Пожалуйста, попробуйте снова.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   // Function to get initials from name
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('');
   };
 
-  // Рендеринг загрузки
-  if (isLoading) {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!title || !description || !date || !time || !address) {
+      alert('Пожалуйста, заполните все обязательные поля');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    // Simulate form submission
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      
+      // Clear form
+      setTitle('');
+      setDescription('');
+      setDate('');
+      setTime('');
+      setAddress('');
+      setBudget('');
+    }, 1500);
+  };
+
+  if (!master) {
     return <TaskFormLoading />;
   }
 
-  // Мастер не найден
-  if (!master) {
+  if (isSubmitted) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Мастер не найден</h1>
-          <p className="text-gray-600 mb-6">Извините, запрашиваемый мастер не найден.</p>
-          <Link href="/masters" className="btn-yellow px-4 py-2 rounded-md">
-            Вернуться к списку мастеров
-          </Link>
+        <div className="max-w-2xl mx-auto">
+          <div className="mb-6">
+            <Link href={`/masters/${masterId}`} className="text-gray-700 hover:text-black flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Вернуться к профилю мастера
+            </Link>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-green-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h2 className="text-2xl font-bold mb-2">Задание успешно отправлено</h2>
+            <p className="text-gray-600 mb-6">
+              Мастер скоро получит ваше предложение и свяжется с вами. Вы можете отслеживать статус задания в личном кабинете.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Link href={`/masters/${masterId}`} className="bg-gray-100 text-gray-800 px-4 py-2 rounded-md font-medium hover:bg-gray-200">
+                Вернуться к профилю мастера
+              </Link>
+              <Link href="/profile" className="bg-yandex-yellow text-black px-4 py-2 rounded-md font-medium btn-yellow hover:bg-yandex-yellow-hover">
+                В личный кабинет
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -185,7 +173,7 @@ function TaskFormContent({ masterId }: { masterId: string }) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-2xl mx-auto">
         <div className="mb-6">
           <Link href={`/masters/${masterId}`} className="text-gray-700 hover:text-black flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -197,207 +185,151 @@ function TaskFormContent({ masterId }: { masterId: string }) {
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-6 border-b border-gray-200">
-            <h1 className="text-2xl font-bold mb-4">Предложить задание</h1>
-            
-            <div className="flex items-center mb-4">
-              <div className="w-12 h-12 rounded-full bg-gray-200 mr-4 overflow-hidden">
-                <SafeImage
-                  src={master.avatar}
-                  alt={master.name}
-                  width={48}
-                  height={48}
-                  className="w-full h-full object-cover"
-                  fallbackText={getInitials(master.name)}
-                />
-              </div>
-              <div>
-                <h2 className="font-bold text-lg">{master.name}</h2>
-                <p className="text-gray-600">{master.title}</p>
-              </div>
+            <h1 className="text-2xl font-bold">Предложить задание</h1>
+            <p className="text-gray-600">Заполните форму, чтобы предложить задание мастеру</p>
+          </div>
+
+          <div className="p-6 border-b border-gray-200 flex items-center">
+            <div className="w-10 h-10 rounded-full bg-gray-200 mr-3 overflow-hidden relative">
+              <SafeImage
+                src={master.avatar}
+                alt={master.name}
+                width={40}
+                height={40}
+                className="w-full h-full object-cover"
+                fallbackText={getInitials(master.name)}
+              />
+              <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                master.status === 'online' ? 'bg-green-500' : 'bg-gray-400'
+              }`}></span>
             </div>
+            <div>
+              <h2 className="font-bold">
+                {master.name}
+                {master.isVerified && (
+                  <svg className="w-4 h-4 text-yandex-yellow inline-block ml-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                  </svg>
+                )}
+              </h2>
+              <p className="text-sm text-gray-600">{master.title}</p>
+            </div>
+            <Link 
+              href={`/chat?master=${masterId}`}
+              className="ml-auto text-gray-600 hover:text-black flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              Написать сообщение
+            </Link>
           </div>
 
           <form onSubmit={handleSubmit} className="p-6">
-            {successMessage && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-md">
-                {successMessage}
-              </div>
-            )}
-            
-            {errorMessage && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-md">
-                {errorMessage}
-              </div>
-            )}
-            
-            <div className="mb-4">
-              <label htmlFor="title" className="block font-medium mb-1 text-gray-700">
-                Название задания *
+            <div className="mb-6">
+              <label htmlFor="title" className="block mb-2 font-medium">
+                Название задания <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 id="title"
-                name="title"
-                required
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder="Например: Установка смесителя в ванной"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
+                placeholder="Например: Заменить смеситель в ванной"
+                required
               />
             </div>
-            
-            <div className="mb-4">
-              <label htmlFor="category" className="block font-medium mb-1 text-gray-700">
-                Категория *
-              </label>
-              <select
-                id="category"
-                name="category"
-                required
-                value={formData.category}
-                onChange={handleInputChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black bg-white"
-              >
-                <option value="">Выберите категорию</option>
-                {categories.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <div className="mb-4">
-              <label htmlFor="description" className="block font-medium mb-1 text-gray-700">
-                Описание задания *
+
+            <div className="mb-6">
+              <label htmlFor="description" className="block mb-2 font-medium">
+                Описание задания <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="description"
-                name="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black h-32"
+                placeholder="Опишите подробно, что нужно сделать. Укажите особенности и требования."
                 required
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Детально опишите, что нужно сделать..."
-                rows={5}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
               ></textarea>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <label htmlFor="budget" className="block font-medium mb-1 text-gray-700">
-                  Бюджет (сом)
-                </label>
-                <input
-                  type="text"
-                  id="budget"
-                  name="budget"
-                  value={formData.budget}
-                  onChange={handleInputChange}
-                  placeholder="Укажите ваш бюджет"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="address" className="block font-medium mb-1 text-gray-700">
-                  Адрес
-                </label>
-                <input
-                  type="text"
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  placeholder="Укажите адрес"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
-                />
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div>
-                <label htmlFor="date" className="block font-medium mb-1 text-gray-700">
-                  Дата
+                <label htmlFor="date" className="block mb-2 font-medium">
+                  Дата <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
                   id="date"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleInputChange}
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
+                  required
                 />
               </div>
-              
               <div>
-                <label htmlFor="time" className="block font-medium mb-1 text-gray-700">
-                  Время
+                <label htmlFor="time" className="block mb-2 font-medium">
+                  Время <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="time"
                   id="time"
-                  name="time"
-                  value={formData.time}
-                  onChange={handleInputChange}
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
+                  required
                 />
               </div>
             </div>
-            
+
             <div className="mb-6">
-              <label className="block font-medium mb-1 text-gray-700">
-                Прикрепить файлы (фото, документы)
+              <label htmlFor="address" className="block mb-2 font-medium">
+                Адрес <span className="text-red-500">*</span>
               </label>
-              <div className="mt-1 flex items-center">
-                <label htmlFor="file-upload" className="cursor-pointer bg-white border border-gray-300 rounded-md py-2 px-4 hover:bg-gray-50 transition">
-                  <span>Выбрать файлы</span>
-                  <input
-                    id="file-upload"
-                    name="file-upload"
-                    type="file"
-                    multiple
-                    className="sr-only"
-                    onChange={handleFileChange}
-                  />
-                </label>
-                <p className="ml-3 text-gray-500 text-sm">До 5 файлов, максимум 10MB каждый</p>
-              </div>
-              
-              {formData.attachments.length > 0 && (
-                <div className="mt-3 space-y-2">
-                  {formData.attachments.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 border border-gray-200 rounded-lg">
-                      <div className="flex items-center">
-                        <svg className="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                        </svg>
-                        <span className="text-sm truncate max-w-xs">{file.name}</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => removeAttachment(index)}
-                        className="text-gray-500 hover:text-red-500"
-                      >
-                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <input
+                type="text"
+                id="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
+                placeholder="Укажите адрес выполнения задания"
+                required
+              />
             </div>
-            
-            <div className="flex justify-end">
+
+            <div className="mb-6">
+              <label htmlFor="budget" className="block mb-2 font-medium">
+                Бюджет (сом)
+              </label>
+              <input
+                type="number"
+                id="budget"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
+                placeholder="Укажите ваш бюджет (необязательно)"
+              />
+            </div>
+
+            <div className="text-right">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`px-6 py-3 bg-yandex-yellow text-black rounded-md font-medium btn-yellow ${
-                  isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-yandex-yellow-hover'
+                className={`bg-yandex-yellow text-black px-6 py-3 rounded-md font-medium btn-yellow hover:bg-yandex-yellow-hover ${
+                  isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
                 }`}
               >
-                {isSubmitting ? 'Отправка...' : 'Отправить задание'}
+                {isSubmitting ? (
+                  <span className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Отправка...
+                  </span>
+                ) : 'Отправить задание'}
               </button>
             </div>
           </form>
@@ -408,7 +340,7 @@ function TaskFormContent({ masterId }: { masterId: string }) {
 }
 
 // Основной компонент страницы
-export default function ProposeTask() {
+export default function ProposeTaskPage() {
   return (
     <Suspense fallback={<TaskFormLoading />}>
       <TaskParamsWrapper>
