@@ -7,53 +7,7 @@ import Image from 'next/image';
 import SafeImage from '@/components/SafeImage';
 import { Master } from '@/types';
 
-// Mock master data
-const mastersData: Record<string, Master> = {
-  '1': {
-    id: 1,
-    name: 'Азамат Шералиев',
-    avatar: 'https://randomuser.me/api/portraits/men/75.jpg',
-    title: 'Сантехник',
-    status: 'online',
-    isVerified: true,
-    hasGuarantee: true,
-    rating: 4.8,
-    reviewCount: 156,
-    experience: '8 лет',
-    education: 'Технический колледж',
-    qualifications: ['Установка сантехники', 'Ремонт труб', 'Монтаж отопления']
-  },
-  '2': {
-    id: 2,
-    name: 'Айгуль Сапарова',
-    avatar: 'https://randomuser.me/api/portraits/women/62.jpg',
-    title: 'Дизайнер интерьера',
-    status: 'offline',
-    isVerified: true,
-    hasGuarantee: true,
-    rating: 4.9,
-    reviewCount: 89,
-    experience: '6 лет',
-    education: 'Кыргызская государственная художественная академия',
-    qualifications: ['Дизайн интерьера', '3D-визуализация', 'Подбор материалов']
-  },
-  '3': {
-    id: 3,
-    name: 'Бакыт Джумагулов',
-    avatar: 'https://randomuser.me/api/portraits/men/34.jpg',
-    title: 'Электрик',
-    status: 'online',
-    isVerified: true,
-    hasGuarantee: true,
-    rating: 4.7,
-    reviewCount: 124,
-    experience: '10 лет',
-    education: 'Политехнический колледж',
-    qualifications: ['Монтаж проводки', 'Установка розеток', 'Диагностика неисправностей']
-  }
-};
-
-// Message type
+// Определения типов
 interface Message {
   id: string;
   text: string;
@@ -62,74 +16,137 @@ interface Message {
   read: boolean;
 }
 
-// Mock initial messages
-const initialChats: Record<string, Message[]> = {
-  '1': [
-    {
-      id: '1',
-      text: 'Здравствуйте! Я хотел бы узнать, сможете ли вы помочь с заменой смесителя в ванной?',
-      sender: 'user',
-      timestamp: new Date(Date.now() - 86400000), // 1 day ago
-      read: true
-    },
-    {
-      id: '2',
-      text: 'Добрый день! Да, конечно, я могу помочь с заменой смесителя. Какая модель смесителя у вас?',
-      sender: 'master',
-      timestamp: new Date(Date.now() - 82800000), // 23 hours ago
-      read: true
-    },
-    {
-      id: '3',
-      text: 'У меня модель Grohe Eurosmart.',
-      sender: 'user',
-      timestamp: new Date(Date.now() - 79200000), // 22 hours ago
-      read: true
-    },
-    {
-      id: '4',
-      text: 'Отлично, я знаком с этой моделью. Когда вам было бы удобно, чтобы я приехал?',
-      sender: 'master',
-      timestamp: new Date(Date.now() - 75600000), // 21 hours ago
-      read: true
-    }
-  ],
-  '2': [
-    {
-      id: '1',
-      text: 'Здравствуйте! Мне нужна консультация по дизайну гостиной. Можете помочь?',
-      sender: 'user',
-      timestamp: new Date(Date.now() - 259200000), // 3 days ago
-      read: true
-    },
-    {
-      id: '2',
-      text: 'Добрый день! Конечно, я с удовольствием проконсультирую вас по дизайну гостиной. Какая площадь помещения и какой стиль вас интересует?',
-      sender: 'master',
-      timestamp: new Date(Date.now() - 172800000), // 2 days ago
-      read: true
-    }
-  ],
-  '3': []
-};
-
 export default function ChatPage() {
   const searchParams = useSearchParams();
-  const masterId = searchParams.get('master') || '1';
-  const master = mastersData[masterId];
+  const masterId = searchParams?.get('master') || '1';
   
+  const [master, setMaster] = useState<Master | null>(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Загрузка данных о мастере
   useEffect(() => {
-    // Simulate loading chat history
-    setIsLoading(true);
-    setTimeout(() => {
-      setMessages(initialChats[masterId] || []);
-      setIsLoading(false);
-    }, 500);
+    const loadMasterData = () => {
+      // Мок данные о мастерах
+      const mastersData: Record<string, Master> = {
+        '1': {
+          id: 1,
+          name: 'Азамат Шералиев',
+          avatar: 'https://randomuser.me/api/portraits/men/75.jpg',
+          title: 'Сантехник',
+          status: 'online',
+          isVerified: true,
+          hasGuarantee: true,
+          rating: 4.8,
+          reviewCount: 156,
+          experience: '8 лет',
+          education: 'Технический колледж',
+          qualifications: ['Установка сантехники', 'Ремонт труб', 'Монтаж отопления']
+        },
+        '2': {
+          id: 2,
+          name: 'Айгуль Сапарова',
+          avatar: 'https://randomuser.me/api/portraits/women/62.jpg',
+          title: 'Дизайнер интерьера',
+          status: 'offline',
+          isVerified: true,
+          hasGuarantee: true,
+          rating: 4.9,
+          reviewCount: 89,
+          experience: '6 лет',
+          education: 'Кыргызская государственная художественная академия',
+          qualifications: ['Дизайн интерьера', '3D-визуализация', 'Подбор материалов']
+        },
+        '3': {
+          id: 3,
+          name: 'Бакыт Джумагулов',
+          avatar: 'https://randomuser.me/api/portraits/men/34.jpg',
+          title: 'Электрик',
+          status: 'online',
+          isVerified: true,
+          hasGuarantee: true,
+          rating: 4.7,
+          reviewCount: 124,
+          experience: '10 лет',
+          education: 'Политехнический колледж',
+          qualifications: ['Монтаж проводки', 'Установка розеток', 'Диагностика неисправностей']
+        }
+      };
+
+      setMaster(mastersData[masterId] || null);
+    };
+
+    loadMasterData();
+  }, [masterId]);
+
+  // Загрузка сообщений
+  useEffect(() => {
+    if (!masterId) return;
+
+    const loadMessageData = () => {
+      setIsLoading(true);
+      
+      // Мок данных сообщений
+      const initialChats: Record<string, Message[]> = {
+        '1': [
+          {
+            id: '1',
+            text: 'Здравствуйте! Я хотел бы узнать, сможете ли вы помочь с заменой смесителя в ванной?',
+            sender: 'user',
+            timestamp: new Date(Date.now() - 86400000), // 1 day ago
+            read: true
+          },
+          {
+            id: '2',
+            text: 'Добрый день! Да, конечно, я могу помочь с заменой смесителя. Какая модель смесителя у вас?',
+            sender: 'master',
+            timestamp: new Date(Date.now() - 82800000), // 23 hours ago
+            read: true
+          },
+          {
+            id: '3',
+            text: 'У меня модель Grohe Eurosmart.',
+            sender: 'user',
+            timestamp: new Date(Date.now() - 79200000), // 22 hours ago
+            read: true
+          },
+          {
+            id: '4',
+            text: 'Отлично, я знаком с этой моделью. Когда вам было бы удобно, чтобы я приехал?',
+            sender: 'master',
+            timestamp: new Date(Date.now() - 75600000), // 21 hours ago
+            read: true
+          }
+        ],
+        '2': [
+          {
+            id: '1',
+            text: 'Здравствуйте! Мне нужна консультация по дизайну гостиной. Можете помочь?',
+            sender: 'user',
+            timestamp: new Date(Date.now() - 259200000), // 3 days ago
+            read: true
+          },
+          {
+            id: '2',
+            text: 'Добрый день! Конечно, я с удовольствием проконсультирую вас по дизайну гостиной. Какая площадь помещения и какой стиль вас интересует?',
+            sender: 'master',
+            timestamp: new Date(Date.now() - 172800000), // 2 days ago
+            read: true
+          }
+        ],
+        '3': []
+      };
+
+      // Имитация задержки загрузки
+      setTimeout(() => {
+        setMessages(initialChats[masterId] || []);
+        setIsLoading(false);
+      }, 500);
+    };
+
+    loadMessageData();
   }, [masterId]);
 
   useEffect(() => {
@@ -212,15 +229,17 @@ export default function ChatPage() {
     }
   });
 
-  if (!master) {
+  // Рендеринг загрузки
+  if (isLoading || !master) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Мастер не найден</h1>
-          <p className="text-gray-600 mb-6">Извините, запрашиваемый мастер не найден.</p>
-          <Link href="/masters" className="btn-yellow px-4 py-2 rounded-md">
-            Вернуться к списку мастеров
-          </Link>
+        <div className="max-w-4xl mx-auto">
+          <div className="h-96 flex justify-center items-center">
+            <svg className="animate-spin h-8 w-8 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
         </div>
       </div>
     );
@@ -275,14 +294,7 @@ export default function ChatPage() {
 
           {/* Chat messages */}
           <div className="h-96 overflow-y-auto p-4 bg-gray-50">
-            {isLoading ? (
-              <div className="flex justify-center items-center h-full">
-                <svg className="animate-spin h-8 w-8 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              </div>
-            ) : groupedMessages.length === 0 ? (
+            {groupedMessages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
                 <svg className="w-16 h-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />

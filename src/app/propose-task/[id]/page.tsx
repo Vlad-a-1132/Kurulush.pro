@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,57 +8,12 @@ import { categories } from '@/data/categories';
 import SafeImage from '@/components/SafeImage';
 import { Master } from '@/types';
 
-// Mock master data - in a real application, this would come from an API
-const mastersData: Record<string, Master> = {
-  '1': {
-    id: 1,
-    name: 'Азамат Шералиев',
-    avatar: 'https://randomuser.me/api/portraits/men/75.jpg',
-    title: 'Сантехник',
-    status: 'online',
-    isVerified: true,
-    hasGuarantee: true,
-    rating: 4.8,
-    reviewCount: 156,
-    experience: '8 лет',
-    education: 'Технический колледж',
-    qualifications: ['Установка сантехники', 'Ремонт труб', 'Монтаж отопления']
-  },
-  '2': {
-    id: 2,
-    name: 'Айгуль Сапарова',
-    avatar: 'https://randomuser.me/api/portraits/women/62.jpg',
-    title: 'Дизайнер интерьера',
-    status: 'offline',
-    isVerified: true,
-    hasGuarantee: true,
-    rating: 4.9,
-    reviewCount: 89,
-    experience: '6 лет',
-    education: 'Кыргызская государственная художественная академия',
-    qualifications: ['Дизайн интерьера', '3D-визуализация', 'Подбор материалов']
-  },
-  '3': {
-    id: 3,
-    name: 'Бакыт Джумагулов',
-    avatar: 'https://randomuser.me/api/portraits/men/34.jpg',
-    title: 'Электрик',
-    status: 'online',
-    isVerified: true,
-    hasGuarantee: true,
-    rating: 4.7,
-    reviewCount: 124,
-    experience: '10 лет',
-    education: 'Политехнический колледж',
-    qualifications: ['Монтаж проводки', 'Установка розеток', 'Диагностика неисправностей']
-  }
-};
-
 export default function ProposeTask({ params }: { params: { id: string } }) {
   const router = useRouter();
   const masterId = params.id;
-  const master = mastersData[masterId];
-
+  
+  const [master, setMaster] = useState<Master | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -74,19 +29,66 @@ export default function ProposeTask({ params }: { params: { id: string } }) {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  if (!master) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Мастер не найден</h1>
-          <p className="text-gray-600 mb-6">Извините, запрашиваемый мастер не найден.</p>
-          <Link href="/masters" className="btn-yellow px-4 py-2 rounded-md">
-            Вернуться к списку мастеров
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // Загрузка данных о мастере
+  useEffect(() => {
+    const loadMasterData = () => {
+      setIsLoading(true);
+      
+      // Mock master data - in a real application, this would come from an API
+      const mastersData: Record<string, Master> = {
+        '1': {
+          id: 1,
+          name: 'Азамат Шералиев',
+          avatar: 'https://randomuser.me/api/portraits/men/75.jpg',
+          title: 'Сантехник',
+          status: 'online',
+          isVerified: true,
+          hasGuarantee: true,
+          rating: 4.8,
+          reviewCount: 156,
+          experience: '8 лет',
+          education: 'Технический колледж',
+          qualifications: ['Установка сантехники', 'Ремонт труб', 'Монтаж отопления']
+        },
+        '2': {
+          id: 2,
+          name: 'Айгуль Сапарова',
+          avatar: 'https://randomuser.me/api/portraits/women/62.jpg',
+          title: 'Дизайнер интерьера',
+          status: 'offline',
+          isVerified: true,
+          hasGuarantee: true,
+          rating: 4.9,
+          reviewCount: 89,
+          experience: '6 лет',
+          education: 'Кыргызская государственная художественная академия',
+          qualifications: ['Дизайн интерьера', '3D-визуализация', 'Подбор материалов']
+        },
+        '3': {
+          id: 3,
+          name: 'Бакыт Джумагулов',
+          avatar: 'https://randomuser.me/api/portraits/men/34.jpg',
+          title: 'Электрик',
+          status: 'online',
+          isVerified: true,
+          hasGuarantee: true,
+          rating: 4.7,
+          reviewCount: 124,
+          experience: '10 лет',
+          education: 'Политехнический колледж',
+          qualifications: ['Монтаж проводки', 'Установка розеток', 'Диагностика неисправностей']
+        }
+      };
+
+      // Имитация задержки загрузки данных
+      setTimeout(() => {
+        setMaster(mastersData[masterId] || null);
+        setIsLoading(false);
+      }, 300);
+    };
+
+    loadMasterData();
+  }, [masterId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -135,6 +137,35 @@ export default function ProposeTask({ params }: { params: { id: string } }) {
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('');
   };
+
+  // Рендеринг загрузки
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-3xl mx-auto flex justify-center items-center h-64">
+          <svg className="animate-spin h-8 w-8 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+      </div>
+    );
+  }
+
+  // Мастер не найден
+  if (!master) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Мастер не найден</h1>
+          <p className="text-gray-600 mb-6">Извините, запрашиваемый мастер не найден.</p>
+          <Link href="/masters" className="btn-yellow px-4 py-2 rounded-md">
+            Вернуться к списку мастеров
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
